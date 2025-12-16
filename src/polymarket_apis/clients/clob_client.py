@@ -45,7 +45,9 @@ from ..utilities.endpoints import (
     CANCEL_ALL,
     CANCEL_ORDERS,
     CREATE_API_KEY,
+    CREATE_READONLY_API_KEY,
     DELETE_API_KEY,
+    DELETE_READONLY_API_KEY,
     DERIVE_API_KEY,
     GET_API_KEYS,
     GET_BALANCE_ALLOWANCE,
@@ -58,6 +60,7 @@ from ..utilities.endpoints import (
     GET_ORDER_BOOK,
     GET_ORDER_BOOKS,
     GET_PRICES,
+    GET_READONLY_API_KEYS,
     GET_SPREAD,
     GET_SPREADS,
     GET_TICK_SIZE,
@@ -158,6 +161,45 @@ class PolymarketClobClient:
         request_args = RequestArgs(method="DELETE", request_path=DELETE_API_KEY)
         headers = create_level_2_headers(self.signer, self.creds, request_args)
         response = self.client.delete(self._build_url(DELETE_API_KEY), headers=headers)
+        response.raise_for_status()
+        return response.json()
+
+    def create_readonly_api_key(self) -> str:
+        request_args = RequestArgs(method="POST", request_path=CREATE_READONLY_API_KEY)
+        headers = create_level_2_headers(self.signer, self.creds, request_args)
+
+        response = self.client.post(
+            self._build_url(CREATE_READONLY_API_KEY), headers=headers
+        )
+        response.raise_for_status()
+        return response.json()["apiKey"]
+
+    def get_readonly_api_keys(self) -> list[str]:
+        request_args = RequestArgs(method="GET", request_path=GET_READONLY_API_KEYS)
+        headers = create_level_2_headers(self.signer, self.creds, request_args)
+
+        response = self.client.get(
+            self._build_url(GET_READONLY_API_KEYS), headers=headers
+        )
+        response.raise_for_status()
+        return response.json()["readonlyApiKeys"]
+
+    def delete_readonly_api_key(self, key: str) -> str:
+        body = {"key": key}
+
+        request_args = RequestArgs(
+            method="DELETE",
+            request_path=DELETE_READONLY_API_KEY,
+            body=body,
+        )
+        headers = create_level_2_headers(self.signer, self.creds, request_args)
+
+        response = self.client.request(
+            "DELETE",
+            self._build_url(DELETE_READONLY_API_KEY),
+            headers=headers,
+            content=json.dumps(body).encode("utf-8"),
+        )
         response.raise_for_status()
         return response.json()
 
@@ -902,3 +944,10 @@ class PolymarketClobClient:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.client.close()
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        self.client.close()
+        await self.async_client.aclose()
