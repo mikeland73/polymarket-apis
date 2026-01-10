@@ -172,7 +172,7 @@ class HolderResponse(BaseModel):
 
 class ValueResponse(BaseModel):
     # User identification
-    proxy_wallet: EthAddress = Field(alias="proxyWallet")
+    user: EthAddress = Field(alias="user")
 
     # Value information
     value: float
