@@ -157,13 +157,13 @@ class PolymarketGammaClient:
         if volume_num_max:
             params["volume_num_max"] = volume_num_max
         if start_date_min:
-            params["start_date_min"] = start_date_min.isoformat()
+            params["start_date_min"] = start_date_min.strftime('%Y-%m-%d')
         if start_date_max:
-            params["start_date_max"] = start_date_max.isoformat()
+            params["start_date_max"] = start_date_max.strftime('%Y-%m-%d')
         if end_date_min:
-            params["end_date_min"] = end_date_min.isoformat()
+            params["end_date_min"] = end_date_min.strftime('%Y-%m-%d')
         if end_date_max:
-            params["end_date_max"] = end_date_max.isoformat()
+            params["end_date_max"] = end_date_max.strftime('%Y-%m-%d')
         if tag_id:
             params["tag_id"] = tag_id
             if related_tags:
@@ -252,13 +252,13 @@ class PolymarketGammaClient:
         if volume_max:
             params["volume_max"] = volume_max
         if start_date_min:
-            params["start_date_min"] = start_date_min.isoformat()
+            params["start_date_min"] = start_date_min.strftime('%Y-%m-%d')
         if start_date_max:
-            params["start_date_max"] = start_date_max.isoformat()
+            params["start_date_max"] = start_date_max.strftime('%Y-%m-%d')
         if end_date_min:
-            params["end_date_min"] = end_date_min.isoformat()
+            params["end_date_min"] = end_date_min.strftime('%Y-%m-%d')
         if end_date_max:
-            params["end_date_max"] = end_date_max.isoformat()
+            params["end_date_max"] = end_date_max.strftime('%Y-%m-%d')
         if tag:
             params["tag"] = tag
         elif tag_id:
